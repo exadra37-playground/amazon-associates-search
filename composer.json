@@ -1,0 +1,18 @@
+{
+    "name": "exadra37/amazon-api",
+    "description": "Search Amazon Product Advertising Api",
+    "type": "project",
+    "require": {
+        "exeu/apai-io": "~2.0"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^3.1"
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Exadra37",
+            "email": "exadra37@gmail.com"
+        }
+    ]
+}
