@@ -4,29 +4,20 @@ namespace Exadra37_Php7\Search_Amazon\Factories;
 
 use ApaiIO\ApaiIO;
 use ApaiIO\Configuration\GenericConfiguration;
-use ApaiIO\Request\GuzzleRequest as Http;
+use Exadra37_Php7\Search_Amazon\Factories\Http_Factory;
 
-/**
-*
-*/
 class Amazon_Api_Factory
 {
-    public function __construct(GenericConfiguration $config, Http $http)
+    public static function build(): ApaiIO
     {
-        $this->Config = $config;
+        $Config = new GenericConfiguration;
 
-        $this->Http = $http;
-    }
+        $Config->setCountry('com')
+               ->setAccessKey('')
+               ->setSecretKey('')
+               ->setAssociatetag('')
+               ->setRequest(Http_Factory::build());
 
-    public function build()
-    {
-        $this->Config
-             ->setCountry('com')
-             ->setAccessKey('')
-             ->setSecretKey('')
-             ->setAssociatetag('')
-             ->setRequest($this->Http);
-
-        return new ApaiIO($this->Config);
+        return new ApaiIO($Config);
     }
 }

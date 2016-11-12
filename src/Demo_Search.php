@@ -15,7 +15,6 @@ class Demo_Search
 
     public function search($term)
     {
-
         echo $term;
     }
 }

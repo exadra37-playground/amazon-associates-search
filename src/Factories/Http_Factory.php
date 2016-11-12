@@ -7,7 +7,7 @@ use ApaiIO\Request\GuzzleRequest;
 
 class Http_Factory
 {
-    public function build()
+    public static function build(): GuzzleRequest
     {
         return new GuzzleRequest(new Client);
     }
