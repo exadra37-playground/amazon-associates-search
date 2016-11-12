@@ -14,5 +14,15 @@
             "name": "Exadra37",
             "email": "exadra37@gmail.com"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Exadra37_Php7\\Search_Amazon\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Exadra37_Php7\\Search_Amazon\\Tests\\Unit\\": "tests/unit"
+        }
+    }
 }
