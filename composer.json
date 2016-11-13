@@ -3,7 +3,8 @@
     "description": "Search Amazon Product Advertising Api",
     "type": "project",
     "require": {
-        "exeu/apai-io": "~2.0"
+        "exeu/apai-io": "~2.0",
+        "raveren/kint": "^1.0"
     },
     "require-dev": {
         "phpspec/phpspec": "^3.1"

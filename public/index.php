@@ -4,6 +4,13 @@ ini_set('display_errors', 'On');
 
 require __DIR__.'/../bootstrap/boot.php';
 
-$amazon = Exadra37_Php7\Search_Amazon\Factories\Demo_Search_Factory::build();
+try {
 
-$amazon->search('php books');
+    $amazon = Exadra37_Php7\Search_Amazon\Factories\Demo_Search_Factory::build();
+
+    $response = $amazon->search('php books');
+
+} catch (Exception $e) {
+
+    echo "Exception:". $e->getResponse()->getBody()->getContents();
+}

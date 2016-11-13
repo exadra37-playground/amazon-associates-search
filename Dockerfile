@@ -2,7 +2,7 @@ FROM ubuntu
 
 MAINTAINER Exadra37 <exadra37@gmail.com>
 
-RUN apt-get update && apt-get -y install zsh curl git vim zip composer apache2 libapache2-mod-php7.0
+RUN apt-get update && apt-get -y install zsh curl git vim zip composer php-xdebug php-xsl apache2 libapache2-mod-php7.0
 
 RUN git config --global user.email "exadra37@gmail.com"
 

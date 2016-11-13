@@ -15,6 +15,12 @@ class Demo_Search
 
     public function search($term)
     {
-        echo $term;
+        $search = new Search;
+        $search->setCategory('Books');
+        $search->setKeywords($term);
+
+        $response = $this->Amazon_Api->runOperation($search);
+
+        return $response;
     }
 }
