@@ -8,9 +8,12 @@ try {
 
     $amazon = Exadra37_Php7\Search_Amazon\Factories\Demo_Search_Factory::build();
 
-    $response = $amazon->search('php books');
+    $search_term = 'Php Books';
+    $category = 'Books';
 
-} catch (Exception $e) {
+    $response = $amazon->search($search_term, $category);
 
-    echo "Exception:". $e->getResponse()->getBody()->getContents();
+} catch (Exception $exception) {
+
+    echo "Exception: ". $exception->getResponse()->getBody()->getContents();
 }

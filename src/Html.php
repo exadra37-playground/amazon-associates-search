@@ -8,7 +8,6 @@ class Html implements ResponseTransformerInterface
 {
     public function transform($response)
     {
-
         $xml =  simplexml_load_string($response);
 
         $xml->registerXPathNamespace("amazon", "http://webservices.amazon.com/AWSECommerceService/2013-08-01");
