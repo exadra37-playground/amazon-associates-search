@@ -1,0 +1,89 @@
+#!/bin/bash
+# @package exadra37-playground/amazon-associates-search
+# @link    https://gitlab.com/u/exadra37-playground/amazon-associates-search
+# @since   2017/02/24
+# @license MIT
+# @author  Exadra37(Paulo Silva) <exadra37ingmailpointcom>
+#
+# Social Links:
+# @link    Auhthor:  https://exadra37.com
+# @link    Github:   https://github.com/Exadra37
+# @link    Linkedin: https://uk.linkedin.com/in/exadra37
+# @link    Twitter:  https://twitter.com/Exadra37
+
+
+
+########################################################################################################################
+# Functions
+########################################################################################################################
+
+    function build()
+    {
+        local image_name="${1:-amazon-associates-search:latest}"
+        local uid=$( id -u )
+        local gid=$( id -g )
+
+        sudo docker build \
+                    --build-arg HOST_USER="${USER}" \
+                    --build-arg HOST_UID="${uid}" \
+                    --build-arg HOST_GID="${gid}" \
+                    -t "${image_name}" \
+                    ./docker
+    }
+
+    function run()
+    {
+        local ports="${1:-8000:80}"
+        local host_app_dir="${2:-$PWD}"
+        local container_name="${3:-amazon-associates-search}"
+        local image_name="${4:-amazon-associates-search:latest}"
+
+        sudo docker run -d \
+                --publish="${ports}" \
+                --name="${container_name}" \
+                --volume="${host_app_dir}":/var/www/html \
+                "${image_name}"
+    }
+
+    function ssh()
+    {
+        local container_name="${1:-amazon-associates-search}"
+        local to_execute="${2:-zsh}"
+
+        sudo docker exec -it \
+                --user="${USER}" \
+                "${container_name}" \
+                "${to_execute}"
+    }
+
+    function start()
+    {
+        local container_name="${1:-amazon-associates-search}"
+
+        shift
+
+        sudo docker start "${container_name}"
+    }
+
+    function stop()
+    {
+        local container_name="${1:-amazon-associates-search}"
+
+        sudo docker stop "${container_name}"
+    }
+
+    function remove()
+    {
+        local container_name="${1:-amazon-associates-search}"
+
+        sudo docker rm "${container_name}"
+    }
+
+    function destroy()
+    {
+        local container_name="${1:-amazon-associates-search}"
+
+        stop "${1}" && remove "${1}"
+    }
+
+"${@}"
