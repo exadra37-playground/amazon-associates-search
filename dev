@@ -1,0 +1,154 @@
+#!/bin/bash
+# @package exadra37-playground/amazon-associates-search
+# @link    https://gitlab.com/u/exadra37-playground/amazon-associates-search
+# @since   2017/02/24
+# @license MIT
+# @author  Exadra37(Paulo Silva) <exadra37ingmailpointcom>
+#
+# Social Links:
+# @link    Auhthor:  https://exadra37.com
+# @link    Github:   https://github.com/Exadra37
+# @link    Linkedin: https://uk.linkedin.com/in/exadra37
+# @link    Twitter:  https://twitter.com/Exadra37
+
+set -e
+
+########################################################################################################################
+# Functions
+########################################################################################################################
+
+    function build()
+    {
+        local image_name="${1:-amazon-associates-search:latest}"
+        local uid=$( id -u )
+        local gid=$( id -g )
+
+        sudo docker build \
+                    --build-arg HOST_USER="${USER}" \
+                    --build-arg HOST_UID="${uid}" \
+                    --build-arg HOST_GID="${gid}" \
+                    -t "${image_name}" \
+                    ./docker
+
+        Print_Text "Container is Ready to Use" "Start it with ./dev run"
+    }
+
+    function run()
+    {
+        local ports="${1:-8000:80}"
+        local host_app_dir="${2:-$PWD}"
+        local container_name="${3:-amazon-associates-search}"
+        local image_name="${4:-amazon-associates-search:latest}"
+
+        sudo docker run -d \
+                --publish="${ports}" \
+                --name="${container_name}" \
+                --workdir="/var/www/html" \
+                --volume=/home/"${USER}"/.secrets/"${container_name}":/home/"${USER}"/.secrets/"${container_name}" \
+                --volume="${host_app_dir}":/var/www/html \
+                "${image_name}"
+
+        Print_Text "Container is now Running" "Use ./dev shell to go inside it. Visit http://localhost:8000 in the browser."
+    }
+
+    function deploy()
+    {
+        local ports="${1:-8000:80}"
+        local host_app_dir="${2:-$PWD}"
+        local container_name="${3:-amazon-associates-search}"
+        local image_name="${4:-amazon-associates-search:latest}"
+
+        build "${image_name}" &&
+        run "${ports}" "${host_app_dir}" "${container_name}" "${image_name}"  &&
+        Print_Text "Container Deployed" "This is the Container Shell." &&
+        shell "${container_name}"
+    }
+
+    function shell()
+    {
+        local container_name="${1:-amazon-associates-search}"
+
+        sudo docker exec -it \
+                --user="${USER}" \
+                "${container_name}" \
+                zsh
+    }
+
+    function start()
+    {
+        local container_name="${1:-amazon-associates-search}"
+
+        sudo docker start "${container_name}"
+
+        Print_Text "Container is now Running" "Use ./dev shell to go inside it. Visit http://localhost:8000 in the browser."
+    }
+
+    function stop()
+    {
+        local container_name="${1:-amazon-associates-search}"
+
+        sudo docker stop "${container_name}"
+
+        Print_Text "Container is now Stopped" "Use ./dev start to start it again or ./dev remove to delete it."
+    }
+
+    function remove()
+    {
+        local container_name="${1:-amazon-associates-search}"
+
+        sudo docker rm "${container_name}"
+
+        Print_Text "Container is now Removed" "Use ./dev deploy to build and start it in 1 go."
+    }
+
+    function destroy()
+    {
+        local container_name="${1:-amazon-associates-search}"
+        local image_name="${2:-amazon-associates-search:latest}"
+
+        stop "${container_name}" &&
+        remove "${container_name}" &&
+        Print_Text "Container is now Destroyed" "Use ./dev deploy to build and start it in 1 go."
+    }
+
+    function purge()
+    {
+        local container_name="${1:-amazon-associates-search}"
+        local image_name="${2:-amazon-associates-search:latest}"
+
+        destroy "${container_name}" "${image_name}" &&
+        sudo docker rmi "${image_name}" &&
+        Print_Text "Container and Image Purged" "Use ./dev deploy to build and start it in 1 go."
+    }
+
+    function secrets()
+    {
+        local container_name="${1:-amazon-associates-search}"
+        local file_name=".secrets.php"
+        local secrets_dir=/home/"${USER}"/.secrets/"${container_name}"
+        local secrets_file="${secrets_dir}"/"${file_name}"
+
+        Print_Text "Edit this file" "${secrets_file}"
+
+        if [ ! -d "${secrets_dir}" ]
+            then
+                mkdir -p "${secrets_dir}"
+        fi
+
+        if [ ! -f "${secrets_file}" ]
+            then
+                cp ./.secrets-example.php "${secrets_file}"
+        fi
+
+        if [ ! -f "${file_name}" ]
+            then
+                ln -s "${secrets_file}"
+        fi
+    }
+
+    function Print_Text()
+    {
+        printf "\n\e[1;42m ${1}:\e[30;48;5;229m ${2} \e[0m \n"
+    }
+
+"${@}"
