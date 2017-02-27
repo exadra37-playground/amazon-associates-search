@@ -1,5 +1,5 @@
 {
-    "name": "exadra37/amazon-api",
+    "name": "exadra37/amazon-associates-search",
     "description": "Search Amazon Product Advertising Api",
     "type": "project",
     "require": {
